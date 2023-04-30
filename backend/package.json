@@ -1,0 +1,54 @@
+{
+  "name": "foodie-app-backend",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "package.json",
+  "author": "Fulop Alex-Dominic <fulopalex2000@gmail.com>",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "sanity start",
+    "build": "sanity build",
+    "dev": "nodemon src/index.ts"
+  },
+  "keywords": [
+    "sanity"
+  ],
+  "dependencies": {
+    "@apollo/server": "^4.7.0",
+    "@graphql-tools/schema": "^9.0.19",
+    "@prisma/client": "^4.13.0",
+    "@sanity/base": "^2.35.0",
+    "@sanity/core": "^2.35.0",
+    "@sanity/default-layout": "^2.35.0",
+    "@sanity/default-login": "^2.35.0",
+    "@sanity/desk-tool": "^2.35.1",
+    "@sanity/eslint-config-studio": "^2.0.1",
+    "@sanity/vision": "^2.35.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "eslint": "^8.6.0",
+    "express": "^4.18.2",
+    "graphql": "^16.6.0",
+    "graphql-subscriptions": "^2.0.0",
+    "graphql-tag": "^2.12.6",
+    "graphql-ws": "^5.12.1",
+    "lodash": "^4.17.21",
+    "merge": "^2.1.1",
+    "next-auth": "4.10.3",
+    "next-transpile-modules": "^10.0.0",
+    "prop-types": "^15.7",
+    "react": "^17.0",
+    "react-dom": "^17.0",
+    "styled-components": "^5.2.0",
+    "ts-node": "^10.9.1",
+    "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/lodash.merge": "^4.6.7",
+    "nodemon": "^2.0.22",
+    "prisma": "^4.13.0",
+    "typescript": "^5.0.4"
+  }
+}
