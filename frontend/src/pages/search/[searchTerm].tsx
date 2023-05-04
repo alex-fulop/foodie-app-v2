@@ -1,4 +1,4 @@
-import React, {Key, useState} from 'react';
+import React, {Key, ReactElement, useState} from 'react';
 import axios from "axios";
 import {BASE_URL} from "../../util";
 import {IUser, Video} from "../../../types";
@@ -9,14 +9,15 @@ import useAuthStore from "../../store/authStore";
 import Link from "next/link";
 import Image from "next/image";
 import {GoVerified} from "react-icons/all";
+import MainLayout from "../layout/MainLayout";
 
 const Search = ({videos}: { videos: Video[] }) => {
     const [isAccounts, setIsAccounts] = useState(false);
 
     const router = useRouter();
 
-    const accounts = isAccounts ? 'border-b-2 border-black' : 'text-neutral-400';
-    const isVideos = !isAccounts ? 'border-b-2 border-black' : 'text-neutral-400';
+    const accounts = isAccounts ? 'border-b-2 border-white' : 'text-neutral-400';
+    const isVideos = !isAccounts ? 'border-b-2 border-white' : 'text-neutral-400';
 
     const {searchTerm}: any = router.query;
     const {allUsers} = useAuthStore();
@@ -25,7 +26,7 @@ const Search = ({videos}: { videos: Video[] }) => {
 
     return (
         <div className='w-full'>
-            <div className="flex gap-10 mb-10 mt-10 border-b-2 bg-white w-full">
+            <div className="flex gap-10 mb-10 mt-10 border-b-2 w-full">
                 <p className={`text-xl font-semibold cursor-pointer mt-2 ${accounts}`}
                    onClick={() => setIsAccounts(true)}>Accounts</p>
                 <p className={`text-xl font-semibold cursor-pointer mt-2 ${isVideos}`}
@@ -55,7 +56,7 @@ const Search = ({videos}: { videos: Video[] }) => {
                                     </div>
                                 </div>
                             </Link>
-                        )):
+                        )) :
                         <NoResults text={`No video results for ${searchTerm}`}/>}
                 </div> : <div className='md:mt-16 flex flex-wrap gap-6 md:justify-start'>
                     {videos.length ?
@@ -65,6 +66,14 @@ const Search = ({videos}: { videos: Video[] }) => {
         </div>
     );
 };
+
+Search.getLayout = function getLayout(page: ReactElement) {
+    return (
+        <MainLayout>
+            {page}
+        </MainLayout>
+    )
+}
 
 export const getServerSideProps = async ({params: {searchTerm}}: {
     params: { searchTerm: string }

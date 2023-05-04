@@ -23,19 +23,16 @@ const Sidebar = () => {
             {showSidebar && (
                 <div
                     className="xl:w-400 w-20 flex flex-col justify-start mb-10 xl:border-0 p-3 overflow-x-hidden">
-                    <Menu />
-
-                    {router.pathname === "/" && (
+                    <Menu/>
+                    {router.pathname === "/chat" ? (
+                        <div className='hidden xl:block'>
+                            <ConversationsWrapper session={session as Session}/>
+                        </div>
+                    ) : (
                         <div>
                             <Discover/>
                             <SuggestedAccounts/>
                             <Footer/>
-                        </div>
-                    )}
-
-                    {router.pathname === "/chat" && (
-                        <div className='hidden xl:block'>
-                            <ConversationsWrapper session={session as Session}/>
                         </div>
                     )}
                 </div>

@@ -23,7 +23,7 @@ export interface Video {
         comment: string;
         _key: string;
         postedBy: {
-            _key: string, _ref: string
+            _key: string, _ref: string, _id: string
         };
     }[];
     userId: string;

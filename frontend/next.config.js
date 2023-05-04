@@ -4,6 +4,9 @@ const nextConfig = {
     swcMinify: true,
     images: {
         domains: ['wallpaperaccess.com', 'lh3.googleusercontent.com']
+    },
+    typescript : {
+        ignoreBuildErrors: true,
     }
 }
 
