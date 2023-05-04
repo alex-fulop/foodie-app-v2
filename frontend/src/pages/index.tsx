@@ -2,8 +2,7 @@ import axios from "axios";
 import {Video} from "../../types";
 import React, {ReactElement} from "react";
 import {BASE_URL} from "../util";
-import {getSession, useSession} from "next-auth/react";
-import {NextPageContext} from "next";
+import {useSession} from "next-auth/react";
 import {Box} from "@chakra-ui/react";
 import MainLayout from "./layout/MainLayout";
 import Feed from "../components/Feed";
@@ -35,19 +34,18 @@ Home.getLayout = function getLayout(page: ReactElement) {
     )
 }
 
-export const getServerSideProps = async (context: NextPageContext, query: string) => {
-    let response;
-    const session = await getSession(context)
+export const getServerSideProps = async ({query: {topic}}: {
+    query: { topic: string };
+}) => {
+    let response = await axios.get(`${BASE_URL}/api/post`);
 
-    if (query) response = await axios.get(`${BASE_URL}/api/discover/${query}`);
-    else response = await axios.get(`${BASE_URL}/api/post`);
+    if (topic) {
+        response = await axios.get(`${BASE_URL}/api/discover/${topic}`);
+    }
 
     return {
-        props: {
-            videos: response.data,
-            session: session
-        }
-    }
+        props: {videos: response.data},
+    };
 };
 
 export default Home
