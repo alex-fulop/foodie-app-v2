@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {Session} from "next-auth";
-import {Box} from "@chakra-ui/react";
+import {Box, Stack} from "@chakra-ui/react";
 import ConversationList from "./ConversationList";
 import {gql, useMutation, useQuery, useSubscription} from "@apollo/client";
 import ConversationOperations from '../../../graphql/operations/conversation'
@@ -111,7 +111,7 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({session}) =>
                     const userParticipant = participants[userParticipantIdx];
 
                     /**
-                     * Update user to show latest
+                     * Update user to show the latest
                      * message as read
                      */
                     participants[userParticipantIdx] = {
@@ -164,7 +164,9 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({session}) =>
     return (
         <Box width={{base: '100%'}} bg='blackAlpha.50' flexDirection="column" gap={4} py={6} px={3}>
             {conversationsLoading ? (
-                <SkeletonLoader count={7} height='80px'/>
+                <Stack spacing={4} px={4}>
+                    <SkeletonLoader count={7} height='80px'/>
+                </Stack>
             ) : (
                 <ConversationList session={session}
                                   conversations={conversationsData?.conversations || []}

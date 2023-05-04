@@ -1,31 +1,36 @@
 import React, {useState} from "react";
-import {Session} from "next-auth";
 import {Button, Center, Image, Input, Stack, Text} from "@chakra-ui/react";
-import {signIn} from "next-auth/react";
+import {signIn, useSession} from "next-auth/react";
 import {useMutation} from "@apollo/client";
 
 import UserOperation from '../../graphql/operations/user'
 import {CreateUsernameData, CreateUsernameVariables} from "../../util/types";
 import toast from "react-hot-toast";
+import {useRouter} from "next/router";
+import axios from "axios";
 
-interface IAuthProps {
-    session: Session | null;
-    reloadSession: () => void
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+const reloadSession = () => {
+    const event = new Event("visibilitychange");
+    document.dispatchEvent(event);
 }
 
-const Auth: React.FunctionComponent<IAuthProps> = ({session, reloadSession}) => {
+const Auth: React.FunctionComponent = () => {
     const [username, setUsername] = useState("");
+    const {data: session} = useSession();
+    const router = useRouter();
+
     const [createUsername, {loading, error}] =
         useMutation<CreateUsernameData, CreateUsernameVariables>(UserOperation.Mutations.createUsername);
 
     const onSubmit = async () => {
         if (!username) return;
-
         try {
             /*
             * createUsername mutation to send our username to the GraphQL API
             */
-            const { data } = await createUsername({variables: {username}});
+            const {data} = await createUsername({variables: {username}});
 
             if (!data?.createUsername) {
                 throw new Error();
@@ -36,12 +41,23 @@ const Auth: React.FunctionComponent<IAuthProps> = ({session, reloadSession}) => 
                 throw new Error(error);
             }
 
+            const userRegistration = {
+                _id: session?.user.id,
+                _type: 'user',
+                userName: session?.user.name,
+                image: session?.user.image
+            }
+
+            await axios.post(`${BASE_URL}/api/sanity`, userRegistration);
+
             toast.success('User info successfully completed! 🍣')
 
             /**
              * Reload session to obtain new user data
              */
             reloadSession();
+
+            await router.push('/');
         } catch (error: any) {
             toast.error(error?.message);
             console.log('onSubmit error', error);

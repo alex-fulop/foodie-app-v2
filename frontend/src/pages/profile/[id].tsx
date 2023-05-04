@@ -18,8 +18,8 @@ const Profile = ({data}: IProps) => {
     const [videosList, setVideosList] = useState<Video[]>([]);
 
     const {user, userVideos, userLikedVideos} = data;
-    const videos = showUserVideos ? 'border-b-2 border-black' : 'text-gray-400';
-    const liked = !showUserVideos ? 'border-b-2 border-black' : 'text-gray-400';
+    const videos = showUserVideos ? 'border-b-2 border-black' : 'text-neutral-400';
+    const liked = !showUserVideos ? 'border-b-2 border-black' : 'text-neutral-400';
 
     useEffect(() => {
         if (showUserVideos) {
@@ -48,13 +48,13 @@ const Profile = ({data}: IProps) => {
                         {user.userName.replaceAll(' ', '')}
                         <GoVerified className='text-blue-400'/>
                     </p>
-                    <p className='text-gray-400 text-xs md:text-xl capitalize'>
+                    <p className='text-neutral-400 text-xs md:text-xl capitalize'>
                         {user.userName}
                     </p>
                 </div>
             </div>
 
-            <div className="flex gap-10 mb-10 mt-10 border-b-2 border-gray-200 bg-white w-full">
+            <div className="flex gap-10 mb-10 mt-10 border-b-2 bg-white w-full">
                 <p className={`text-xl font-semibold cursor-pointer mt-2 ${videos}`}
                    onClick={() => setShowUserVideos(true)}>Videos</p>
                 <p className={`text-xl font-semibold cursor-pointer mt-2 ${liked}`}

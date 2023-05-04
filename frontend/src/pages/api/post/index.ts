@@ -8,7 +8,7 @@ type Data = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-    if(req.method === 'GET') {
+    if (req.method === 'GET') {
         const query = allPostsQuery();
 
         const data = await client.fetch(query);
@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const document = req.body;
 
         client.create(document)
-            .then(() => res.status(201).json('Video Created'));
+            .then(() => res.status(201).json({name: 'Video Created'}));
     }
 }
 

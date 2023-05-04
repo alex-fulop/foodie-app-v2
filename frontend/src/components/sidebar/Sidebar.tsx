@@ -1,46 +1,42 @@
 import React, {useState} from "react";
-import {AiOutlineMenu} from "react-icons/ai";
-import {ImCancelCircle} from "react-icons/im";
 import Discover from "./Discover";
 import Footer from "./Footer";
 import SuggestedAccounts from "./SuggestedAccounts";
 import Menu from "./Menu";
 import ConversationsWrapper from "../chat/conversations/ConversationsWrapper";
+import {useSession} from "next-auth/react";
 import {Session} from "next-auth";
+import {useRouter} from "next/router";
 
-interface ISidebarProps {
-    currentPage: string;
-    setCurrentPage: React.Dispatch<React.SetStateAction<string>>;
-    session: Session
-}
-
-const Sidebar = ({currentPage, setCurrentPage, session}: ISidebarProps) => {
+const Sidebar = () => {
     const [showSidebar, setShowSidebar] = useState(true);
+    const {data: session} = useSession();
+    const router = useRouter();
+
     return (
         <div>
             <div
                 className="block xl:hidden m-2 ml-4 mt-3 text-xl"
                 onClick={() => setShowSidebar((prev) => !prev)}
             >
-                {showSidebar ? <ImCancelCircle/> : <AiOutlineMenu/>}
             </div>
             {showSidebar && (
                 <div
-                    className="xl:w-400 w-20 flex flex-col justify-start mb-10 border-r-2 border-gray-100 xl:border-0 p-3 overflow-x-hidden">
-                    <Menu setCurrentPage={setCurrentPage}/>
+                    className="xl:w-400 w-20 flex flex-col justify-start mb-10 xl:border-0 p-3 overflow-x-hidden">
+                    <Menu />
 
-                    {currentPage === "home" && (
-                        <>
+                    {router.pathname === "/" && (
+                        <div>
                             <Discover/>
                             <SuggestedAccounts/>
                             <Footer/>
-                        </>
+                        </div>
                     )}
 
-                    {currentPage === "messages" && (
-                        <>
-                            <ConversationsWrapper session={session}/>
-                        </>
+                    {router.pathname === "/chat" && (
+                        <div className='hidden xl:block'>
+                            <ConversationsWrapper session={session as Session}/>
+                        </div>
                     )}
                 </div>
             )}

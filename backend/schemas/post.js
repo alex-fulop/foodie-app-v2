@@ -38,7 +38,7 @@ export default {
       ],
     },
     {
-      name: "Comments",
+      name: "comments",
       title: "Comments",
       type: "array",
       of: [{ type: "comment" }],

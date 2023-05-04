@@ -1,12 +1,15 @@
-import React, {useState} from 'react';
+import React, {ReactElement, useState} from 'react';
 import {FaCloudUploadAlt} from "react-icons/all";
-import {client} from "../util/client";
 import {SanityAssetDocument} from "@sanity/client";
-import {topics} from "../util/constants";
-import useAuthStore from "../store/authStore";
 import axios from "axios";
 import {useRouter} from "next/router";
-import {BASE_URL} from "../util";
+import toast from "react-hot-toast";
+import {topics} from "../../util/constants";
+import {client} from "../../util/client";
+import {BASE_URL} from "../../util";
+import MainLayout from "../layout/MainLayout";
+import Link from "next/link";
+import {useSession} from "next-auth/react";
 
 const Upload = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -16,8 +19,10 @@ const Upload = () => {
     const [category, setCategory] = useState(topics[0].name);
     const [savingPost, setSavingPost] = useState(false);
 
-    const {userProfile}: { userProfile: any } = useAuthStore();
+    const {data: session} = useSession()
     const router = useRouter();
+
+    console.log("OKAY", session?.user)
 
     const uploadVideo = async (e: any) => {
         const selectedFile = e.target.files[0];
@@ -42,6 +47,8 @@ const Upload = () => {
         if (recipe && videoAsset?._id && category) {
             setSavingPost(true);
 
+            console.log(session?.user)
+
             const document = {
                 _type: 'post',
                 caption: recipe,
@@ -52,38 +59,42 @@ const Upload = () => {
                         _ref: videoAsset?._id,
                     }
                 },
-                userId: userProfile?._id,
+                userId: session?.user.id,
                 postedBy: {
                     _type: 'postedBy',
-                    _ref: userProfile?._id
+                    _ref: session?.user.id
                 },
                 topic: category
             }
 
-            await axios.post(`${BASE_URL}/api/post`, document);
-
-            router.push('/');
+            await toast.promise(Promise.all(
+                [axios.post(`${BASE_URL}/api/post`, document), router.push('/')]), {
+                loading: "Uploading video",
+                success: "Video uploaded successfully",
+                error: "Failed to upload video",
+            })
         }
     }
 
     return (
-        <div className="flex w-full h-full absolute left-0 top-[60px] mb-10 pt-10 lg:pt-20 bg-[#F8F8F8] justify-center">
+        <div
+            className="flex w-full h-full absolute left-0 top-[68px] mb-10 pt-10 lg:pt-20 bg-neutral-900 justify-center">
             <div
-                className="bg-white rounded-lg xl:h-[80vh] w-[60%] flex gap-6 flex-wrap justify-between items-center p-14 pt-6">
+                className="bg-blend-darken rounded-lg xl:h-[80vh] w-[60%] flex gap-6 flex-wrap justify-between items-center p-14 pt-6">
                 <div>
                     <div>
                         <p className="text-2xl font-bold">Upload Video</p>
-                        <p className="text-md text-gray-400 mt-1">Post a video to your account</p>
+                        <p className="text-md text-neutral-400 mt-1">Post a video to your account</p>
                     </div>
-                    <div className="border-dashed rounded-xl border-4 border-gray-200 flex flex-col justify-center
-                     items-center outline-none mt-10 w-[260px] h-[460px] p-10 cursor-pointer hover:border-red-300 hover:bg-gray-100">
+                    <div className="border-dashed rounded-xl border-4 flex flex-col justify-center
+                     items-center outline-none mt-10 w-[260px] h-[460px] cursor-pointer hover:border-red-300 hover:bg-neutral-600">
                         {isLoading ? (
                             <p>Uploading...</p>
                         ) : (
                             <div>
                                 {videoAsset ? (
                                     <div>
-                                        <video className="rounded-xl h-[450px] mt-16 bg-black" src={videoAsset.url} loop
+                                        <video className="rounded-xl h-[450px] bg-black" src={videoAsset.url} loop
                                                controls></video>
                                     </div>
                                 ) : (
@@ -91,13 +102,13 @@ const Upload = () => {
                                         <div className="flex flex-col items-center justify-center h-full">
                                             <div className="flex flex-col items-center justify-center">
                                                 <p className="font-bold text-xl">
-                                                    <FaCloudUploadAlt className="text-gray-300 text-6xl"/>
+                                                    <FaCloudUploadAlt className="text-neutral-300 text-6xl"/>
                                                 </p>
                                                 <p className="text-xl font-semibold">
                                                     Upload Video
                                                 </p>
                                             </div>
-                                            <p className="text-gray-400 text-center mt-10 text-sm leading-10">
+                                            <p className="text-neutral-400 text-center mt-10 text-sm leading-10">
                                                 MP4 or WebM or ogg <br/>
                                                 720x1280 or higher <br/>
                                                 Up to 10 minutes <br/>
@@ -122,31 +133,33 @@ const Upload = () => {
 
                 <div className="flex flex-col gap-3 pb-10">
                     <label className="text-md font-medium">Recipe</label>
-                    <textarea className="rounded outline-none text-md border-2 border-gray-200 p-2 resize-none"
+                    <textarea className="rounded outline-none text-md border-2 p-2 resize-none bg-black"
+                              placeholder='Write your recipe here..'
                               rows={3} value={recipe} onChange={(e) => {
                         setRecipe(e.target.value)
                     }}></textarea>
                     <label className="text-md font-medium">Choose a category</label>
                     <select
-                        className="outline-none border-2 border-gray-200 text-md capitalize lg:p-4 p-2 rounded cursor-pointer bg-white"
+                        className="outline-none border-2 text-md capitalize lg:p-4 p-2 rounded cursor-pointer bg-black"
                         onChange={(e) => {
                             setCategory(e.target.value)
                         }}>
                         {topics.map((topic) => (
                             <option
-                                className="outline-none capitalize bg-white text-gray-700 text-md p-2 hover:bg-slate-300"
+                                className="outline-none capitalize bg-black text-neutral-300 text-md p-2 hover:bg-slate-300"
                                 key={topic.name} value={topic.name}>
                                 {topic.name}
                             </option>
                         ))}
                     </select>
                     <div className="flex gap-6 mt-10">
-                        <button
-                            className="border-gray-300 border-2 text-md font-medium p-2 rounded w-28 lg:w-44 outline-none"
-                            onClick={() => {
-                            }} type="button">
-                            Discard
-                        </button>
+                        <Link href='/'>
+                            <button
+                                className="border-gray-300 border-2 text-md font-medium p-2 rounded w-28 lg:w-44 outline-none"
+                                type="button">
+                                Discard
+                            </button>
+                        </Link>
                         <button
                             className="bg-[#F51997] text-white text-md font-medium p-2 rounded w-28 lg:w-44 outline-none"
                             onClick={handlePost} type="button">
@@ -158,5 +171,13 @@ const Upload = () => {
         </div>
     );
 };
+
+Upload.getLayout = function getLayout(page: ReactElement) {
+    return (
+        <MainLayout>
+            {page}
+        </MainLayout>
+    )
+}
 
 export default Upload;

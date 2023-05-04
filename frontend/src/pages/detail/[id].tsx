@@ -6,15 +6,17 @@ import {BsFillPlayFill, GoVerified, HiVolumeOff, HiVolumeUp, MdOutlineCancel} fr
 import {useRouter} from "next/router";
 import Link from "next/link";
 import Image from "next/image";
-import useAuthStore from "../../store/authStore";
 import LikeButton from "../../components/LikeButton";
 import Comments from "../../components/Comments";
+import {useSession} from "next-auth/react";
+import {getAllUsers} from "../../util/functions";
 
 interface IProps {
     postDetails: Video
+    allUsers: []
 }
 
-const Detail = ({postDetails}: IProps) => {
+const Detail = ({postDetails, allUsers}: IProps) => {
     const [post, setPost] = useState(postDetails);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isVideoMuted, setIsVideoMuted] = useState(false);
@@ -23,7 +25,7 @@ const Detail = ({postDetails}: IProps) => {
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const router = useRouter();
-    const {userProfile}: any = useAuthStore();
+    const {data: session} = useSession();
 
     const onVideoClick = () => {
         if (isPlaying) {
@@ -42,25 +44,31 @@ const Detail = ({postDetails}: IProps) => {
     }, [post, isVideoMuted]);
 
     const handleLike = async (like: boolean) => {
-        if (userProfile) {
+        if (!session?.user) {
+            throw new Error("Not authorized");
+        }
+
             const {data} = await axios.put(`${BASE_URL}/api/like`, {
-                userId: userProfile._id,
+                userId: session?.user.id,
                 postId: post._id,
                 like
             });
 
             setPost({...post, likes: data.likes});
-        }
     }
 
-    const addComment = async (e) => {
+    const addComment = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (userProfile && comment) {
+        if (!session?.user) {
+            throw new Error("Not authorized");
+        }
+
+        if (comment) {
             setIsPostingComment(true);
 
             const {data} = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
-                userId: userProfile._id,
+                userId: session?.user.id,
                 comment
             });
 
@@ -69,10 +77,13 @@ const Detail = ({postDetails}: IProps) => {
             setIsPostingComment(false);
         }
     }
+
+    console.log(post)
+
     if (!post) return null;
 
     return (
-        <div className='flex w-full absolute left-0 top-0 bg-white flex-wrap lg:flex-nowrap'>
+        <div className='flex w-full absolute left-0 top-0 bg-dark flex-wrap lg:flex-nowrap'>
             <div
                 className='relative flex-2 w-[1000px] lg:w-9/12 flex justify-center items-center bg-blurred-img bg-no-repeat bg-cover bg-center'>
                 <div className='absolute top-6 left-2 lg:left-6 flex gap-6 z-50'>
@@ -127,7 +138,7 @@ const Detail = ({postDetails}: IProps) => {
                                         {` `}
                                         <GoVerified className='text-blue-400 text-md'/>
                                     </p>
-                                    <p className='capitalize font-medium text-xs text-gray-500 hidden md:block'>
+                                    <p className='capitalize font-medium text-xs text-neutral-500 hidden md:block'>
                                         {post.postedBy.userName}
                                     </p>
                                 </div>
@@ -135,10 +146,10 @@ const Detail = ({postDetails}: IProps) => {
                         </div>
                     </div>
 
-                    <p className='px-10 text-lg text-gray-600'>{post.caption}</p>
+                    <p className='px-10 text-2xl mt-2 text-neutral-300'>{post.caption}</p>
 
                     <div className='mt-10 px-10'>
-                        {userProfile && (
+                        {session?.user && (
                             <LikeButton likes={post.likes}
                                         handleLike={() => handleLike(true)}
                                         handleDislike={() => handleLike(false)}
@@ -151,6 +162,7 @@ const Detail = ({postDetails}: IProps) => {
                               setComment={setComment}
                               addComment={addComment}
                               isPostingComment={isPostingComment}
+                              allUsers={allUsers}
                     />
                 </div>
             </div>
@@ -162,9 +174,9 @@ export const getServerSideProps = async ({params: {id}}: {
     params: { id: string }
 }) => {
     const {data} = await axios.get(`${BASE_URL}/api/post/${id}`);
-
+    const allUsers = await getAllUsers();
     return {
-        props: {postDetails: data}
+        props: {postDetails: data, allUsers}
     }
 }
 export default Detail;

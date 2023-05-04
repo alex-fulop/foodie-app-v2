@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {Key, useState} from 'react';
 import axios from "axios";
 import {BASE_URL} from "../../util";
 import {IUser, Video} from "../../../types";
@@ -15,8 +15,8 @@ const Search = ({videos}: { videos: Video[] }) => {
 
     const router = useRouter();
 
-    const accounts = isAccounts ? 'border-b-2 border-black' : 'text-gray-400';
-    const isVideos = !isAccounts ? 'border-b-2 border-black' : 'text-gray-400';
+    const accounts = isAccounts ? 'border-b-2 border-black' : 'text-neutral-400';
+    const isVideos = !isAccounts ? 'border-b-2 border-black' : 'text-neutral-400';
 
     const {searchTerm}: any = router.query;
     const {allUsers} = useAuthStore();
@@ -36,7 +36,7 @@ const Search = ({videos}: { videos: Video[] }) => {
                 <div className="md:mt-16">
                     {searchedAccounts.length > 0 ? searchedAccounts.map((user: IUser, idx: number) => (
                             <Link href={`/profile/${user._id}`} key={idx}>
-                                <div className='flex gap-3 p-2 cursor-pointer font-semibold rounded border-b-2 border-gray-200'>
+                                <div className='flex gap-3 p-2 cursor-pointer font-semibold rounded border-b-2'>
                                     <div className="w-8 h-8">
                                         <Image
                                             src={user.image}
@@ -51,7 +51,7 @@ const Search = ({videos}: { videos: Video[] }) => {
                                             {user.userName.replaceAll(' ', '')}
                                             <GoVerified className='text-blue-400'/>
                                         </p>
-                                        <p className='text-gray-400 text-xs capitalize'>{user.userName}</p>
+                                        <p className='text-neutral-400 text-xs capitalize'>{user.userName}</p>
                                     </div>
                                 </div>
                             </Link>
@@ -59,7 +59,7 @@ const Search = ({videos}: { videos: Video[] }) => {
                         <NoResults text={`No video results for ${searchTerm}`}/>}
                 </div> : <div className='md:mt-16 flex flex-wrap gap-6 md:justify-start'>
                     {videos.length ?
-                        videos.map((video: Video, idx: Number) => <VideoCard post={video} key={idx}/>) :
+                        videos.map((video: Video, idx: Number) => <VideoCard post={video} key={idx as Key}/>) :
                         <NoResults text={`No video results for ${searchTerm}`}/>}
                 </div>}
         </div>

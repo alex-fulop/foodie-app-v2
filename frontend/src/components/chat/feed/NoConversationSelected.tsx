@@ -5,6 +5,7 @@ import {ConversationsData} from "../../../util/types";
 import ConversationOperations from "../../../graphql/operations/conversation";
 import {useQuery} from "@apollo/client";
 import {IModalContext, ModalContext} from "../../../context/ModalContext";
+import {useRouter} from "next/router";
 
 const NoConversation: React.FC = () => {
     const {data, loading, error} = useQuery<ConversationsData, null>(
@@ -15,12 +16,11 @@ const NoConversation: React.FC = () => {
     if (!data?.conversations || loading || error) return null;
 
     const {conversations} = data;
-
     const hasConversations = conversations.length;
 
     const text = hasConversations
         ? "Select a Conversation"
-        : "Let's Get Started 🥳";
+        : "Let's Get Started 🍡";
 
     return (
         <Flex height="100%" justify="center" align="center">

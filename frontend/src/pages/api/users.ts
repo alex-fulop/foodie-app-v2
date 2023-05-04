@@ -14,7 +14,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         if (data) {
             res.status(200).send(data);
         } else {
-            res.json([]);        }
+            res.json([]);
+        }
     }
 }
 

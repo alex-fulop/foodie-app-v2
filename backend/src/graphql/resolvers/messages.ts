@@ -50,7 +50,7 @@ const resolvers = {
 
                 return messages;
             } catch (error: any) {
-                console.log('messages error', error);
+                console.log('chat error', error);
                 throw new GraphQLError(error?.message);
             }
         }

@@ -101,7 +101,7 @@ const ConversationModal: React.FC<ConversationModalProps> = ({
 
         for (const conversation of conversations) {
             const addedParticipants = conversation.participants.filter(
-                (p) => p.user.id !== userId
+                (p: ParticipantPopulated) => p.user.id !== userId
             );
 
             if (addedParticipants.length !== participantIds.length) {

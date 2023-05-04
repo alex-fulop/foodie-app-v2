@@ -19,10 +19,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .setIfMissing({comments: []})
             .insert('after', 'comments[-1]', [
                 {
-                    comment,
                     _key: uuid(),
-                    postedBy: {_type: 'postedBy', _ref: userId}
-                }
+                    comment: comment,
+                    postedBy: {_key: uuid(), _ref: userId},
+                },
             ])
             .commit();
 

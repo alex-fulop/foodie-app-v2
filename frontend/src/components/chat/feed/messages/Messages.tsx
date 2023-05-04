@@ -57,7 +57,7 @@ const Messages: React.FC<MessagesProps> = ({userId, conversationId}) => {
     }
 
     return (
-        <Flex direction="column" justify="flex-end" overflow="hidden" css={{}}>
+        <Flex direction="column" justify="flex-end" overflow="hidden">
             {loading && (
                 <Stack spacing={4} px={4}>
                     <SkeletonLoader count={4} height="60px" width="100%"/>
