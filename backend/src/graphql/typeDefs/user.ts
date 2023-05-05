@@ -14,6 +14,7 @@ const typeDefs = gql`
     type SearchedUser {
         id: String
         username: String
+        image: String
     }
 
     type Query {

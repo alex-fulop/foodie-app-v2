@@ -5,7 +5,6 @@ import {ConversationsData} from "../../../util/types";
 import ConversationOperations from "../../../graphql/operations/conversation";
 import {useQuery} from "@apollo/client";
 import {IModalContext, ModalContext} from "../../../context/ModalContext";
-import {useRouter} from "next/router";
 
 const NoConversation: React.FC = () => {
     const {data, loading, error} = useQuery<ConversationsData, null>(

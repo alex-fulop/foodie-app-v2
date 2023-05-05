@@ -13,6 +13,18 @@ export const formatUsernames = (
     return usernames.join(', ');
 }
 
+export const getProfilePicture = (
+    participants: Array<ParticipantPopulated>,
+    myUserId: string
+): string => {
+    const profilePictures = participants
+        .filter((participant) => participant.user.id != myUserId)
+        .map((participant) => participant.user.image);
+
+    return profilePictures[0];
+}
+
+
 export const getAllUsers = async () => {
     const response = await axios.get(`${BASE_URL}/api/users`);
     return response.data;

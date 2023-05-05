@@ -8,6 +8,7 @@ const ConversationFields = `
     user {
       id
       username
+      image
     }
     hasSeenLatestMessage
   }

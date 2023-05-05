@@ -32,7 +32,7 @@ const UserSearchList: React.FC<UserListProps> = ({
                             borderRadius={4}
                             _hover={{bg: "whiteAlpha.200"}}
                         >
-                            <Avatar/>
+                            <Avatar src={user.image}/>
                             <Flex justify="space-between" width="100%">
                                 <Text color="whiteAlpha.700">{user.username}</Text>
                                 <Button

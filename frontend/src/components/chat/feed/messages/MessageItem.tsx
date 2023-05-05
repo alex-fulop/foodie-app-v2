@@ -7,6 +7,7 @@ import {enUS} from "date-fns/locale";
 interface MessageItemProps {
     message: MessagePopulated;
     sentByMe: boolean;
+    senderImage: string
 }
 
 const formatRelativeLocale = {
@@ -16,7 +17,7 @@ const formatRelativeLocale = {
     other: "MM/dd/yy",
 }
 
-const MessageItem: React.FC<MessageItemProps> = ({message, sentByMe}) => {
+const MessageItem: React.FC<MessageItemProps> = ({message, sentByMe, senderImage}) => {
     return (
         <Stack direction='row'
                p={4}
@@ -26,7 +27,7 @@ const MessageItem: React.FC<MessageItemProps> = ({message, sentByMe}) => {
                wordBreak='break-word'>
             {!sentByMe && (
                 <Flex align='flex-end'>
-                    <Avatar size='sm'/>
+                    <Avatar size='sm' src={senderImage}/>
                 </Flex>
             )}
             <Stack spacing={1} width='100%'>

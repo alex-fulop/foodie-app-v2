@@ -1,7 +1,7 @@
-import { User } from "@prisma/client";
-import { GraphQLError } from "graphql";
-import { verifyAndCreateUsername } from "../../util/functions";
-import { CreateUsernameResponse, GraphQLContext } from "../../util/types";
+import {User} from "@prisma/client";
+import {GraphQLError} from "graphql";
+import {verifyAndCreateUsername} from "../../util/functions";
+import {CreateUsernameResponse, GraphQLContext} from "../../util/types";
 
 const resolvers = {
     Query: {
@@ -22,7 +22,7 @@ const resolvers = {
             } = session;
 
             try {
-                const users = await prisma.user.findMany({
+                return await prisma.user.findMany({
                     where: {
                         username: {
                             contains: searchedUsername,
@@ -31,8 +31,6 @@ const resolvers = {
                         },
                     },
                 });
-
-                return users;
             } catch (error: any) {
                 console.log("error", error);
                 throw new GraphQLError(error?.message);

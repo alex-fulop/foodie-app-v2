@@ -27,9 +27,9 @@ const Auth: React.FunctionComponent = () => {
     const onSubmit = async () => {
         if (!username) return;
         try {
-            /*
-            * createUsername mutation to send our username to the GraphQL API
-            */
+            /**
+             * createUsername mutation to send our username to the GraphQL API
+             */
             const {data} = await createUsername({variables: {username}});
 
             if (!data?.createUsername) {
@@ -57,11 +57,11 @@ const Auth: React.FunctionComponent = () => {
              */
             reloadSession();
 
-            await router.push('/');
         } catch (error: any) {
             toast.error(error?.message);
             console.log('onSubmit error', error);
         }
+        await router.push('/');
     }
 
     return (

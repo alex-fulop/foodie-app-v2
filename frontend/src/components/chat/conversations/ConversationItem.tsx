@@ -6,7 +6,7 @@ import {GoPrimitiveDot} from "react-icons/go";
 import {MdDeleteOutline} from "react-icons/md";
 import {BiLogOut} from "react-icons/bi";
 import {AiOutlineEdit} from "react-icons/ai";
-import {formatUsernames} from "../../../util/functions";
+import {formatUsernames, getProfilePicture} from "../../../util/functions";
 import {ConversationPopulated} from "../../../../../backend/src/util/types";
 
 const formatRelativeLocale = {
@@ -108,7 +108,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
                     <GoPrimitiveDot fontSize={18} color="#6B46C1"/>
                 )}
             </Flex>
-            <Avatar/>
+            <Avatar src={getProfilePicture(conversation.participants, userId)}/>
             <Flex justify="space-between" width="80%" height="100%">
                 <Flex direction="column" width="70%" height="100%">
                     <Text

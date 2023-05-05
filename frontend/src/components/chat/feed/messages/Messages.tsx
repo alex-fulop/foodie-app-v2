@@ -10,9 +10,10 @@ import MessageItem from "./MessageItem";
 interface MessagesProps {
     userId: string;
     conversationId: string;
+    senderImage: string
 }
 
-const Messages: React.FC<MessagesProps> = ({userId, conversationId}) => {
+const Messages: React.FC<MessagesProps> = ({userId, conversationId, senderImage}) => {
 
     const {
         data,
@@ -56,6 +57,8 @@ const Messages: React.FC<MessagesProps> = ({userId, conversationId}) => {
         return null;
     }
 
+    console.log('aci x2', data?.messages)
+
     return (
         <Flex direction="column" justify="flex-end" overflow="hidden">
             {loading && (
@@ -70,6 +73,7 @@ const Messages: React.FC<MessagesProps> = ({userId, conversationId}) => {
                             key={message.id}
                             message={message}
                             sentByMe={message.sender.id === userId}
+                            senderImage={message.sender.image}
                         />
                     ))}
                 </Flex>

@@ -16,7 +16,13 @@ interface ConversationsWrapperProps {
 const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({session}) => {
     const router = useRouter();
     const {query: {conversationId}} = router;
+
+    if (!session?.user) {
+        throw new Error("Not authorized");
+    }
+
     const {user: {id: userId}} = session;
+
     const {
         data: conversationsData,
         loading: conversationsLoading,
