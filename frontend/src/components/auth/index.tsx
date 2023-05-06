@@ -1,25 +1,23 @@
 import React, {useState} from "react";
 import {Button, Center, Image, Input, Stack, Text} from "@chakra-ui/react";
-import {signIn, useSession} from "next-auth/react";
+import {signIn} from "next-auth/react";
 import {useMutation} from "@apollo/client";
 
 import UserOperation from '../../graphql/operations/user'
 import {CreateUsernameData, CreateUsernameVariables} from "../../util/types";
 import toast from "react-hot-toast";
-import {useRouter} from "next/router";
 import axios from "axios";
+import {Session} from "next-auth";
 
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-const reloadSession = () => {
-    const event = new Event("visibilitychange");
-    document.dispatchEvent(event);
+interface IAuthProps {
+    session: Session | null;
+    reloadSession: () => void;
 }
 
-const Auth: React.FunctionComponent = () => {
+const Auth: React.FC<IAuthProps> = ({session, reloadSession}) => {
     const [username, setUsername] = useState("");
-    const {data: session} = useSession();
-    const router = useRouter();
 
     const [createUsername, {loading, error}] =
         useMutation<CreateUsernameData, CreateUsernameVariables>(UserOperation.Mutations.createUsername);
@@ -56,12 +54,10 @@ const Auth: React.FunctionComponent = () => {
              * Reload session to obtain new user data
              */
             reloadSession();
-
         } catch (error: any) {
             toast.error(error?.message);
             console.log('onSubmit error', error);
         }
-        await router.push('/');
     }
 
     return (
@@ -77,8 +73,10 @@ const Auth: React.FunctionComponent = () => {
                 ) : (
                     <>
                         <Image src='/foodie-logo.svg' height='60px'/>
-                        <Button onClick={() => signIn('google')}
-                                leftIcon={<Image src='/google-logo.png' height='20px'/>}>Continue with Google</Button>
+                        <Button onClick={() => {
+                            signIn('google');
+                            reloadSession();
+                        }} leftIcon={<Image src='/google-logo.png' height='20px'/>}>Continue with Google</Button>
                     </>
                 )}
             </Stack>

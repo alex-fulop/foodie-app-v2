@@ -16,9 +16,9 @@ const links = [
 ];
 
 const activeLink =
-    "flex items-center gap-3 hover:bg-gray-700 p-3 justify-center xl:justify-start cursor-pointer font-semibold text-[#F51997] rounded";
+    "flex items-center gap-3 hover:bg-neutral-700 p-3 justify-center xl:justify-start cursor-pointer font-semibold text-[#F51997] rounded";
 const inactiveLink =
-    "flex items-center gap-3 hover:bg-gray-700 p-3 justify-center xl:justify-start cursor-pointer font-semibold text-[#F58EC8] rounded";
+    "flex items-center gap-3 hover:bg-neutral-700 p-3 justify-center xl:justify-start cursor-pointer font-semibold text-[#F58EC8] rounded";
 
 const Menu = () => {
     const [activeLinkIndex, setActiveLinkIndex] = useState(0);

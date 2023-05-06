@@ -21,7 +21,7 @@ const Footer = () => {
       <List items={footerList1} mt={false} />
       <List items={footerList2} mt={true} />
       <List items={footerList3} mt={true} />
-      <p className="text-neutral-400 text-sm mt-5">2022 Foodie</p>
+      <p className="text-neutral-400 text-sm mt-5">2023 Foodie</p>
     </div>
   );
 };

@@ -1,12 +1,12 @@
 import axios from "axios";
 import {Video} from "../../types";
-import React, {ReactElement} from "react";
-import {BASE_URL} from "../util";
+import React from "react";
 import {useSession} from "next-auth/react";
-import {Box} from "@chakra-ui/react";
 import MainLayout from "./layout/MainLayout";
 import Feed from "../components/Feed";
-import {useRouter} from "next/router";
+import {Box} from "@chakra-ui/react";
+import Auth from "../components/auth";
+import {BASE_URL} from "../util/constants";
 
 interface IProps {
     videos: Video[]
@@ -14,24 +14,27 @@ interface IProps {
 
 const Home = ({videos}: IProps) => {
     const {data: session} = useSession();
-    const router = useRouter();
 
-    if (session?.user?.username === undefined)
-        router.push('/auth')
+    const reloadSession = () => {
+        const event = new Event("visibilitychange");
+        document.dispatchEvent(event);
+    };
+
+    console.log('session', session?.user);
 
     return (
         <Box>
-            <Feed videos={videos}/>
+            {session && session?.user?.username ? (
+                <MainLayout>
+                    <Feed videos={videos}/>
+                </MainLayout>
+            ) : (
+                <Box>
+                    <Auth session={session} reloadSession={reloadSession}/>
+                </Box>
+            )}
         </Box>
     );
-}
-
-Home.getLayout = function getLayout(page: ReactElement) {
-    return (
-        <MainLayout>
-            {page}
-        </MainLayout>
-    )
 }
 
 export const getServerSideProps = async ({query: {topic}}: {

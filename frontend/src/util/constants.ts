@@ -57,3 +57,19 @@ export const footerList3 = [
     "Creator Portal",
     "Community Guidelines",
 ];
+
+export const randomGradients = [
+    'bg-gradient-to-r from-yellow-600 to-red-600',
+    'bg-gradient-to-r from-pink-400 to-pink-600',
+    'bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500',
+    'bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400',
+    'bg-gradient-to-r from-emerald-500 to-lime-600',
+    'bg-gradient-to-r from-rose-500 via-red-400 to-red-500',
+    'bg-[conic-gradient(at_left,_var(--tw-gradient-stops))] from-yellow-500 via-purple-500 to-blue-500',
+    'bg-gradient-to-b from-gray-900 via-purple-900 to-violet-600',
+    'bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-300 via-fuchsia-600 to-orange-600'
+];
+
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+

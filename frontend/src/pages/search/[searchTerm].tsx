@@ -1,6 +1,5 @@
 import React, {Key, ReactElement, useState} from 'react';
 import axios from "axios";
-import {BASE_URL} from "../../util";
 import {IUser, Video} from "../../../types";
 import NoResults from "../../components/NoResults";
 import {useRouter} from "next/router";
@@ -10,6 +9,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {GoVerified} from "react-icons/all";
 import MainLayout from "../layout/MainLayout";
+import {BASE_URL} from "../../util/constants";
 
 const Search = ({videos}: { videos: Video[] }) => {
     const [isAccounts, setIsAccounts] = useState(false);
@@ -60,7 +60,7 @@ const Search = ({videos}: { videos: Video[] }) => {
                         <NoResults text={`No video results for ${searchTerm}`}/>}
                 </div> : <div className='md:mt-16 flex flex-wrap gap-6 md:justify-start'>
                     {videos.length ?
-                        videos.map((video: Video, idx: Number) => <VideoCard post={video} key={idx as Key}/>) :
+                        videos.map((video: Video, idx: number) => <VideoCard post={video} key={idx as Key} idx={idx}/>) :
                         <NoResults text={`No video results for ${searchTerm}`}/>}
                 </div>}
         </div>

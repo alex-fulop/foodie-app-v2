@@ -4,12 +4,14 @@ import {NextPage} from "next";
 import Link from "next/link";
 import Image from 'next/image';
 import {BsFillPauseFill, BsFillPlayFill, GoVerified, HiVolumeOff, HiVolumeUp} from "react-icons/all";
+import {getRandomGradient} from "../util/functions";
 
 interface IProps {
     post: Video;
+    idx: number
 }
 
-const VideoCard: NextPage<IProps> = ({post}) => {
+const VideoCard: NextPage<IProps> = ({post, idx}) => {
     const [isHover, setIsHover] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isVideoMuted, setIsVideoMuted] = useState(false);
@@ -27,7 +29,7 @@ const VideoCard: NextPage<IProps> = ({post}) => {
     }
 
     useEffect(() => {
-        if(videoRef?.current) {
+        if (videoRef?.current) {
             videoRef.current.muted = isVideoMuted;
         }
     }, [isVideoMuted]);
@@ -71,7 +73,7 @@ const VideoCard: NextPage<IProps> = ({post}) => {
                         <video
                             loop
                             ref={videoRef}
-                            className='lg:w-[600px] lg:h-[530px] h-[300px] md:h-[600px] rounded-2xl cursor-pointer bg-blurred-img'
+                            className={`lg:w-[600px] lg:h-[530px] h-[300px] md:h-[600px] rounded-2xl cursor-pointer ${getRandomGradient(parseInt(idx.toString().charAt(0)))}`}
                             src={post.video.asset.url}
                         >
                         </video>

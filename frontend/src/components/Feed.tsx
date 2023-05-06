@@ -9,8 +9,9 @@ interface IFeedProps {
 
 const Feed: React.FC<IFeedProps> = ({videos}) => {
     return (
-        <div className='overflow-x-hidden'>
-            {videos.length ? (videos.map((video: Video) => (<VideoCard post={video} key={video._id}/>))
+        <div className='feed-container'>
+            {videos.length ? (videos.map((video: Video, idx: number) => (
+                <VideoCard post={video} key={video._id} idx={idx}/>))
             ) : (
                 <div className='my-60'>
                     <NoResults text={'No Videos'}/>

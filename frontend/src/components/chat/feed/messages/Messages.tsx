@@ -1,5 +1,5 @@
 import {Flex, Stack} from "@chakra-ui/react";
-import React, {useEffect} from "react";
+import React, {useEffect, useRef} from "react";
 import {useQuery} from "@apollo/client";
 import {MessagesData, MessageSubscriptionData, MessagesVariables} from "../../../../util/types";
 import MessageOperations from '../../../../graphql/operations/message';
@@ -15,49 +15,55 @@ interface MessagesProps {
 
 const Messages: React.FC<MessagesProps> = ({userId, conversationId, senderImage}) => {
 
-    const {
-        data,
-        loading,
-        error,
-        subscribeToMore
-    } = useQuery<MessagesData, MessagesVariables>(MessageOperations.Query.messages, {
+    const { data, loading, error, subscribeToMore } = useQuery<
+        MessagesData,
+        MessagesVariables
+    >(MessageOperations.Query.messages, {
         variables: {
             conversationId,
         },
-        onError: ({message}) => {
+        onError: ({ message }) => {
             toast.error(message);
         },
-        onCompleted: () => {
-        }
     });
 
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
     const subscribeToMoreMessages = (conversationId: string) => {
-        subscribeToMore({
+        return subscribeToMore({
             document: MessageOperations.Subscription.messageSent,
             variables: {
-                conversationId
+                conversationId,
             },
-            updateQuery: (prev, {subscriptionData}: MessageSubscriptionData) => {
-                if (!subscriptionData) return prev;
+            updateQuery: (prev, { subscriptionData }: MessageSubscriptionData) => {
+                if (!subscriptionData.data) return prev;
 
                 const newMessage = subscriptionData.data.messageSent;
 
                 return Object.assign({}, prev, {
-                    messages: newMessage.sender.id === userId ? prev.messages : [newMessage, ...prev.messages],
+                    messages:
+                        newMessage.sender.id === userId
+                            ? prev.messages
+                            : [newMessage, ...prev.messages],
                 });
             },
         });
     };
 
     useEffect(() => {
-        subscribeToMoreMessages(conversationId);
-    }, [conversationId])
+        const unsubscribe = subscribeToMoreMessages(conversationId);
+
+        return () => unsubscribe();
+    }, [conversationId]);
+
+    useEffect(() => {
+        if (!messagesEndRef.current || !data) return;
+        messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }, [data, messagesEndRef.current]);
 
     if (error) {
         return null;
     }
-
-    console.log('aci x2', data?.messages)
 
     return (
         <Flex direction="column" justify="flex-end" overflow="hidden">

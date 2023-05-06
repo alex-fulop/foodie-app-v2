@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from "axios";
-import {BASE_URL} from "../../util";
 import {Video} from "../../../types";
 import {BsFillPlayFill, GoVerified, HiVolumeOff, HiVolumeUp, MdOutlineCancel} from "react-icons/all";
 import {useRouter} from "next/router";
@@ -10,6 +9,7 @@ import LikeButton from "../../components/LikeButton";
 import Comments from "../../components/Comments";
 import {useSession} from "next-auth/react";
 import {getAllUsers} from "../../util/functions";
+import {BASE_URL} from "../../util/constants";
 
 interface IProps {
     postDetails: Video

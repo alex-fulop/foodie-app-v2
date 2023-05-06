@@ -1,6 +1,7 @@
 import {ParticipantPopulated} from '../../../backend/src/util/types';
 import axios from "axios";
-import {BASE_URL} from "./index";
+import {BASE_URL} from "./constants";
+import {randomGradients} from "./constants";
 
 export const formatUsernames = (
     participants: Array<ParticipantPopulated>,
@@ -33,4 +34,8 @@ export const getAllUsers = async () => {
 export const getAllCommentsFromPost = async (id: String) => {
     const {data} = await axios.put(`${BASE_URL}/api/post/${id}`);
     return data.comments;
+}
+
+export const getRandomGradient = (idx: number) => {
+    return randomGradients[idx];
 }

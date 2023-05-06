@@ -76,9 +76,9 @@ const Navbar = () => {
                             />
                         </Link>
                     )}
-                    <Button bg='transparent' rounded='full' onClick={() => signOut()}>
+                    <button className='border-2 p-2 hover:border-red-500 bg-transparent rounded-full' onClick={() => signOut()}>
                         <AiOutlineLogout color="red" fontSize={21}/>
-                    </Button>
+                    </button>
                 </div>
             ) : (
                 <Button onClick={() => signIn('google')}>Sign In</Button>
