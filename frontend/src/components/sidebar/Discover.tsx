@@ -1,32 +1,12 @@
 import React from "react";
 import Link from "next/link";
 
-import { topics } from "../../util/constants";
+import {borderColors, textColors, topics} from "../../util/constants";
 import { useRouter } from "next/router";
 
 const Discover = () => {
   const router = useRouter();
   const { topic } = router.query;
-  const borderColors = [
-    "xl:border-[#FF0000]",
-    "xl:border-[#FF8C00]",
-    "xl:border-[#F7FF00]",
-    "xl:border-[#2AFF00]",
-    "xl:border-[#00EAFF]",
-    "xl:border-[#0062FF]",
-    "xl:border-[#9000FF]",
-    "xl:border-[#FF00FF]",
-  ];
-  const textColors = [
-    "text-[#FF0000]",
-    "text-[#FF8C00]",
-    "text-[#F7FF00]",
-    "text-[#2AFF00]",
-    "text-[#00EAFF]",
-    "text-[#0062FF]",
-    "text-[#9000FF]",
-    "text-[#FF00FF]",
-  ];
 
   const getClassStyle = (item: { name: string }, idx: number) => {
     if (topic === item.name)

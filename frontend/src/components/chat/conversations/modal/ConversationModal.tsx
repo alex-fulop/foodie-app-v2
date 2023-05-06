@@ -3,7 +3,7 @@ import {Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOver
 import {Box, Button, Input, Stack} from "@chakra-ui/react";
 import {useLazyQuery, useMutation} from "@apollo/client";
 import UserOperations from '../../../../graphql/operations/user'
-import ConversationOperations from '../../../../graphql/operations/conversation'
+import ConversationOperations from '../../../../graphql/operations/conversations'
 import {CreateConversationData, SearchedUser, SearchUsersData, SearchUsersInputs} from "../../../../util/types";
 import {ConversationPopulated, ParticipantPopulated,} from "../../../../../../backend/src/util/types";
 import Participants from "./Participants";

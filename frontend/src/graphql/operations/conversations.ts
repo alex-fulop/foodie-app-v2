@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {MessageFields} from "./message";
+import {MessageFields} from "./messages";
 
 const ConversationFields = `
   id

@@ -2,7 +2,7 @@ import {Flex, Stack} from "@chakra-ui/react";
 import React, {useEffect, useRef} from "react";
 import {useQuery} from "@apollo/client";
 import {MessagesData, MessageSubscriptionData, MessagesVariables} from "../../../../util/types";
-import MessageOperations from '../../../../graphql/operations/message';
+import MessageOperations from '../../../../graphql/operations/messages';
 import toast from "react-hot-toast";
 import SkeletonLoader from "../../../common/SkeletonLoader";
 import MessageItem from "./MessageItem";

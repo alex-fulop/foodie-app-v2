@@ -129,33 +129,52 @@ const resolvers = {
                 throw new GraphQLError(error?.message)
             }
         },
-        deleteConversation: async function (_: any, args: { conversationId: string }, context: GraphQLContext): Promise<boolean> {
+        deleteConversation: async function (
+            _: any,
+            args: { conversationId: string },
+            context: GraphQLContext
+        ): Promise<boolean> {
             const {session, prisma, pubsub} = context;
             const {conversationId} = args;
 
             if (!session?.user) {
-                throw new GraphQLError('Not Authorized');
+                throw new GraphQLError("Not authorized");
+            }
+
+            const conversation = await prisma.conversation.findUnique({
+                where: {id: conversationId},
+                include: {latestMessage: true},
+            });
+
+            if (!conversation) {
+                throw new Error('Conversation not found');
             }
 
             try {
                 /**
                  * Delete conversation and all related entities
                  */
-                const [deletedConversation] = await prisma.$transaction([prisma.conversation.delete({
-                    where: {
-                        id: conversationId
-                    },
-                    include: conversationPopulated,
-                }),
-                    prisma.conversationParticipant.deleteMany({
-                        where: {
-                            conversationId,
-                        },
+                const [deletedConversation] = await prisma.$transaction([
+                    // Update the conversation to remove the reference to the latest message
+                    prisma.conversation.update({
+                        where: {id: conversationId},
+                        data: {latestMessage: {disconnect: true}},
                     }),
                     prisma.message.deleteMany({
                         where: {
                             conversationId,
                         },
+                    }),
+                    prisma.conversationParticipant.deleteMany({
+                        where: {
+                            conversationId,
+                        },
+                    }),
+                    prisma.conversation.delete({
+                        where: {
+                            id: conversationId
+                        },
+                        include: conversationPopulated,
                     }),
                 ]);
 

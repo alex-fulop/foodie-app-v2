@@ -1,5 +1,5 @@
 import userResolvers from './user'
-import conversationResolvers from './conversation'
+import conversationResolvers from './conversations'
 import messageResolvers from './messages'
 import scalarResolvers from './scalars'
 import merge from 'lodash.merge'

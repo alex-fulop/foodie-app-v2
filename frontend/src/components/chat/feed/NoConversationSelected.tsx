@@ -2,7 +2,7 @@ import {Button, Flex, Stack, Text} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {BiMessageSquareDots} from "react-icons/bi";
 import {ConversationsData} from "../../../util/types";
-import ConversationOperations from "../../../graphql/operations/conversation";
+import ConversationOperations from "../../../graphql/operations/conversations";
 import {useQuery} from "@apollo/client";
 import {IModalContext, ModalContext} from "../../../context/ModalContext";
 

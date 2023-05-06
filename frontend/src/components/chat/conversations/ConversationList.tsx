@@ -8,7 +8,7 @@ import {ConversationPopulated, ParticipantPopulated,} from "../../../../../backe
 import {IModalContext, ModalContext} from "../../../context/ModalContext";
 import ConversationItem from "./ConversationItem";
 import ConversationModal from "./modal/ConversationModal";
-import ConversationOperations from '../../../graphql/operations/conversation'
+import ConversationOperations from '../../../graphql/operations/conversations'
 
 interface ConversationListProps {
     session: Session;
@@ -116,6 +116,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                 py={2}
                 px={4}
                 mb={4}
+                mt={2}
                 bg="blackAlpha.300"
                 borderRadius={4}
                 cursor="pointer"

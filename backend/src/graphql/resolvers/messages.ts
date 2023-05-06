@@ -3,7 +3,7 @@ import {GraphQLError} from "graphql/error";
 import {Prisma} from "@prisma/client";
 import {withFilter} from "graphql-subscriptions";
 import {userIsConversationParticipant} from "../../util/functions";
-import {conversationPopulated} from "./conversation";
+import {conversationPopulated} from "./conversations";
 
 const resolvers = {
     Query: {

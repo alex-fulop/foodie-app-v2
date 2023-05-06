@@ -1,4 +1,4 @@
-import React, {ReactElement} from "react";
+import React, {ReactElement, useEffect} from "react";
 import {useRouter} from "next/router";
 import {Flex} from "@chakra-ui/react";
 import MainLayout from "../../pages/layout/MainLayout";
@@ -18,10 +18,6 @@ const Chat: NextPageWithLayout = () => {
             <Flex height="90vh">
                 <div className='hidden lg:flex w-[100%]'>
                     <FeedWrapper session={session as Session}/>
-                </div>
-                <div className='flex lg:hidden w-[100%]'>
-                    {conversationId ? <FeedWrapper session={session as Session}/>
-                        : <ConversationsWrapper session={session as Session}/>}
                 </div>
             </Flex>
         </>

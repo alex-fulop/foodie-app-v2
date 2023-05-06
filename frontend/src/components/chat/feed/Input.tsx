@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import {Box, Input} from "@chakra-ui/react";
 import toast from "react-hot-toast";
 import {useMutation} from "@apollo/client";
-import MessageOperations from '../../../graphql/operations/message';
+import MessageOperations from '../../../graphql/operations/messages';
 import {SendMessageArguments} from '../../../../../backend/src/util/types';
 import {ObjectID} from "bson";
 import {MessagesData} from "../../../util/types";

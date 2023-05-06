@@ -69,8 +69,8 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
         >
             {showMenu && (
                 <Menu isOpen={menuOpen} onClose={() => setMenuOpen(false)}>
-                    <MenuList bg="#2d2d2d">
-                        <MenuItem
+                    <MenuList bg="#262626">
+                        <MenuItem _hover={{bg: '#171717'}} bg='#262626'
                             icon={<AiOutlineEdit fontSize={20}/>}
                             onClick={(event) => {
                                 event.stopPropagation();
@@ -80,7 +80,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
                             Edit
                         </MenuItem>
                         {conversation.participants.length > 2 ? (
-                            <MenuItem
+                            <MenuItem _hover={{bg: '#171717'}} bg='#262626'
                                 icon={<BiLogOut fontSize={20}/>}
                                 onClick={(event) => {
                                     event.stopPropagation();
@@ -90,7 +90,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
                                 Leave
                             </MenuItem>
                         ) : (
-                            <MenuItem
+                            <MenuItem _hover={{bg: '#171717'}} bg='#262626'
                                 icon={<MdDeleteOutline fontSize={20}/>}
                                 onClick={(event) => {
                                     event.stopPropagation();

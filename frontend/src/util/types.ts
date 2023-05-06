@@ -44,12 +44,14 @@ export interface CreateConversationInput {
 
 export interface ConversationUpdatedData {
     conversationUpdated: {
-        // conversation: Omit<ConversationPopulated, 'latestMessage'> & {
-        //     latestMessage: MessagePopulated
-        // };
-        conversation: ConversationPopulated
-    },
+        conversation: Omit<ConversationPopulated, "latestMessage"> & {
+            latestMessage: MessagePopulated;
+        };
+        addedUserIds: Array<string> | null;
+        removedUserIds: Array<string> | null;
+    };
 }
+
 /**
  * Messages
  */
@@ -67,4 +69,18 @@ export interface MessageSubscriptionData {
             messageSent: MessagePopulated;
         }
     }
+}
+
+export interface ConversationCreatedSubscriptionData {
+    subscriptionData: {
+        data: {
+            conversationCreated: ConversationPopulated;
+        };
+    };
+}
+
+export interface ConversationDeletedData {
+    conversationDeleted: {
+        id: string;
+    };
 }

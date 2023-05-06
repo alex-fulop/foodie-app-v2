@@ -2,7 +2,7 @@ import {useQuery} from "@apollo/client";
 import {Button, Stack, Text} from "@chakra-ui/react";
 import {useRouter} from "next/router";
 import React from "react";
-import ConversationOperations from "../../../../graphql/operations/conversation";
+import ConversationOperations from "../../../../graphql/operations/conversations";
 import {formatUsernames} from "../../../../util/functions";
 import {ConversationsData} from "../../../../util/types";
 import SkeletonLoader from "../../../common/SkeletonLoader";

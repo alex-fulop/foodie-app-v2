@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from 'next/image';
 import {BsFillPauseFill, BsFillPlayFill, GoVerified, HiVolumeOff, HiVolumeUp} from "react-icons/all";
 import {getRandomGradient} from "../util/functions";
+import {randomGradients} from "../util/constants";
 
 interface IProps {
     post: Video;
@@ -33,6 +34,7 @@ const VideoCard: NextPage<IProps> = ({post, idx}) => {
             videoRef.current.muted = isVideoMuted;
         }
     }, [isVideoMuted]);
+
 
     return (
         <div className="flex flex-col pb-6">
@@ -73,7 +75,7 @@ const VideoCard: NextPage<IProps> = ({post, idx}) => {
                         <video
                             loop
                             ref={videoRef}
-                            className={`lg:w-[600px] lg:h-[530px] h-[300px] md:h-[600px] rounded-2xl cursor-pointer ${getRandomGradient(parseInt(idx.toString().charAt(0)))}`}
+                            className={`lg:w-[600px] lg:h-[530px] h-[300px] md:h-[600px] rounded-2xl cursor-pointer ${randomGradients[parseInt(idx.toString().charAt(0))]}`}
                             src={post.video.asset.url}
                         >
                         </video>

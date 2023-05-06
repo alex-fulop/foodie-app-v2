@@ -2,7 +2,7 @@ import {Prisma, PrismaClient} from "@prisma/client";
 import {ISODateString, Session} from "next-auth";
 
 import 'next-auth'
-import {conversationPopulated, participantPopulated} from "../graphql/resolvers/conversation";
+import {conversationPopulated, participantPopulated} from "../graphql/resolvers/conversations";
 import {Context} from "graphql-ws/lib/server";
 import {PubSub} from "graphql-subscriptions";
 import {messagePopulated} from "../graphql/resolvers/messages";
