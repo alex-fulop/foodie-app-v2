@@ -73,7 +73,7 @@ const Messages: React.FC<MessagesProps> = ({userId, conversationId, senderImage}
                 </Stack>
             )}
             {data?.messages && (
-                <Flex flexDirection="column-reverse" overflowY="scroll" height="100%">
+                <Flex className="feed-container" flexDirection="column-reverse" overflowY="scroll" height="100%">
                     {data.messages.map((message) => (
                         <MessageItem
                             key={message.id}

@@ -1,4 +1,4 @@
-import {Avatar, Box, Flex, Menu, MenuItem, MenuList, Stack, Text,} from "@chakra-ui/react";
+import {Avatar, Box, Flex, Icon, Menu, MenuItem, MenuList, Stack, Text, useColorModeValue,} from "@chakra-ui/react";
 import {formatRelative} from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import React, {useState} from "react";
@@ -8,6 +8,7 @@ import {BiLogOut} from "react-icons/bi";
 import {AiOutlineEdit} from "react-icons/ai";
 import {formatUsernames, getProfilePicture} from "../../../util/functions";
 import {ConversationPopulated} from "../../../../../backend/src/util/types";
+import {theme} from "../../../chakra/theme";
 
 const formatRelativeLocale = {
     lastWeek: "eeee",
@@ -105,7 +106,11 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
             )}
             <Flex position="absolute" left="-6px">
                 {hasSeenLatestMessage === false && (
-                    <GoPrimitiveDot fontSize={18} color="#6B46C1"/>
+                    <Icon
+                        as={GoPrimitiveDot}
+                        color={theme.colors.brand[100]}
+                        fontSize={18}
+                    />
                 )}
             </Flex>
             <Avatar src={getProfilePicture(conversation.participants, userId)}/>

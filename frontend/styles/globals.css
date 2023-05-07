@@ -44,3 +44,12 @@ a {
 .feed-container::-webkit-scrollbar {
   display: none; /* hide scrollbar on Chrome, Safari, and Opera */
 }
+
+.video-controls {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.video-controls.visible {
+  opacity: 1;
+}

@@ -93,26 +93,26 @@ const resolvers = {
             args: { userId: string, conversationId: string },
             context: GraphQLContext
         ): Promise<boolean> {
-            const {session, prisma} = context;
-            const {userId, conversationId} = args;
+            const { session, prisma } = context;
+            const { userId, conversationId } = args;
 
-            if (!session.user) {
-                throw new GraphQLError('Not authorized');
+            if (!session?.user) {
+                throw new GraphQLError("Not authorized");
             }
 
             try {
                 const participant = await prisma.conversationParticipant.findFirst({
                     where: {
                         userId,
-                        conversationId
+                        conversationId,
                     },
                 });
 
                 /**
-                 * Should always exist but being safe
+                 * Should always exists but being safe
                  */
                 if (!participant) {
-                    throw new GraphQLError('Participant entity not found');
+                    throw new GraphQLError("Participant entity not found");
                 }
 
                 await prisma.conversationParticipant.update({
@@ -121,12 +121,13 @@ const resolvers = {
                     },
                     data: {
                         hasSeenLatestMessage: true,
-                    }
+                    },
                 });
+
                 return true;
             } catch (error: any) {
-                console.log('markConversationAsRead error', error);
-                throw new GraphQLError(error?.message)
+                console.log("markConversationAsRead error", error);
+                throw new GraphQLError(error?.message);
             }
         },
         deleteConversation: async function (
@@ -204,12 +205,10 @@ const resolvers = {
 
                 const {conversationCreated: {participants}} = payload;
 
-                const userIsParticipant = userIsConversationParticipant(
+                return userIsConversationParticipant(
                     participants,
                     session.user.id
                 );
-
-                return userIsParticipant;
             })
         },
         conversationUpdated: {

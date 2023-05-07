@@ -59,7 +59,7 @@ const ConversationsWrapper: React.FC<ConversationsProps> = ({session}) => {
     useSubscription<ConversationUpdatedData, null>(
         ConversationOperations.Subscriptions.conversationUpdated,
         {
-            onData: ({client, data}) => {
+            onData: async ({client, data}) => {
                 const {data: subscriptionData} = data;
 
                 if (!subscriptionData) return;
@@ -72,8 +72,14 @@ const ConversationsWrapper: React.FC<ConversationsProps> = ({session}) => {
                     },
                 } = subscriptionData;
 
-                const {id: updatedConversationId, latestMessage} =
-                    updatedConversation;
+                const currentlyViewingConversation = updatedConversation.id === conversationId;
+
+                if (currentlyViewingConversation) {
+                    await onViewConversation(conversationId as string, false);
+                    return;
+                }
+
+                const {id: updatedConversationId, latestMessage} = updatedConversation;
 
                 /**
                  * Check if user is being removed
@@ -135,17 +141,6 @@ const ConversationsWrapper: React.FC<ConversationsProps> = ({session}) => {
                             },
                         });
                     }
-                }
-
-                /**
-                 * Already viewing conversation where
-                 * new message is received; no need
-                 * to manually update cache due to
-                 * message subscription
-                 */
-                if (updatedConversationId === conversationId) {
-                    onViewConversation(conversationId as string, false);
-                    return;
                 }
 
                 const existing = client.readQuery<MessagesData>({
@@ -217,10 +212,13 @@ const ConversationsWrapper: React.FC<ConversationsProps> = ({session}) => {
         conversationId: string,
         hasSeenLatestMessage: boolean
     ) => {
-        router.push({query: {conversationId}});
+        /**
+         * 1. Push the conversationId to the router query params
+         */
+        await router.push({query: {conversationId}});
 
         /**
-         * Only mark as read if conversation is unread
+         * 2. Mark the conversation as read
          */
         if (hasSeenLatestMessage) return;
 
@@ -235,8 +233,7 @@ const ConversationsWrapper: React.FC<ConversationsProps> = ({session}) => {
                 },
                 update: (cache) => {
                     /**
-                     * Get conversation participants
-                     * from cache
+                     * Get conversation participants from cache
                      */
                     const participantsFragment = cache.readFragment<{
                         participants: Array<ParticipantPopulated>;
@@ -248,6 +245,7 @@ const ConversationsWrapper: React.FC<ConversationsProps> = ({session}) => {
                                     user {
                                         id
                                         username
+                                        image
                                     }
                                     hasSeenLatestMessage
                                 }
@@ -257,28 +255,20 @@ const ConversationsWrapper: React.FC<ConversationsProps> = ({session}) => {
 
                     if (!participantsFragment) return;
 
-                    /**
-                     * Create copy to
-                     * allow mutation
-                     */
                     const participants = [...participantsFragment.participants];
 
                     const userParticipantIdx = participants.findIndex(
                         (p) => p.user.id === userId
                     );
 
-                    /**
-                     * Should always be found
-                     * but just in case
-                     */
                     if (userParticipantIdx === -1) return;
 
                     const userParticipant = participants[userParticipantIdx];
 
                     /**
-                     * Update user to show latest
-                     * message as read
+                     * Update participant to show latest message as read
                      */
+
                     participants[userParticipantIdx] = {
                         ...userParticipant,
                         hasSeenLatestMessage: true,
@@ -290,7 +280,7 @@ const ConversationsWrapper: React.FC<ConversationsProps> = ({session}) => {
                     cache.writeFragment({
                         id: `Conversation:${conversationId}`,
                         fragment: gql`
-                            fragment UpdatedParticipants on Conversation {
+                            fragment UpdatedParticipant on Conversation {
                                 participants
                             }
                         `,

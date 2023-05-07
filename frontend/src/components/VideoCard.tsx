@@ -4,8 +4,6 @@ import {NextPage} from "next";
 import Link from "next/link";
 import Image from 'next/image';
 import {BsFillPauseFill, BsFillPlayFill, GoVerified, HiVolumeOff, HiVolumeUp} from "react-icons/all";
-import {getRandomGradient} from "../util/functions";
-import {randomGradients} from "../util/constants";
 
 interface IProps {
     post: Video;
@@ -75,15 +73,17 @@ const VideoCard: NextPage<IProps> = ({post, idx}) => {
                         <video
                             loop
                             ref={videoRef}
-                            className={`lg:w-[600px] lg:h-[530px] h-[300px] md:h-[600px] rounded-2xl cursor-pointer ${randomGradients[parseInt(idx.toString().charAt(0))]}`}
+                            className="lg:w-[600px] lg:h-[530px] h-[300px] md:h-[600px] rounded-2xl cursor-pointer bg-gradient-to-r from-pink-400 to-pink-600 bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-60 border border-neutral-900"
+                            style={{backdropFilter: 'blur(20px)'}}
                             src={post.video.asset.url}
+
                         >
                         </video>
                     </Link>
 
                     {isHover && (
                         <div
-                            className="absolute bottom-6 cursor-pointer left-8 md:left-14 lg:left-4 flex gap-10 lg:justify-between w-[100px] md:w-[50px] p-3">
+                            className="absolute bottom-6 cursor-pointer left-8 md:left-14 lg:left-4 flex gap-10 lg:justify-between w-[100px] md:w-[50px] p-3 video-controls{isHover && 'visible'}">
                             {isPlaying ? (
                                 <button onClick={onVideoPress}>
                                     <BsFillPauseFill className="text-black text-2xl lg:text-4xl"/>

@@ -35,7 +35,3 @@ export const getAllCommentsFromPost = async (id: String) => {
     const {data} = await axios.put(`${BASE_URL}/api/post/${id}`);
     return data.comments;
 }
-
-export const getRandomGradient = (idx: number) => {
-    return randomGradients[idx];
-}

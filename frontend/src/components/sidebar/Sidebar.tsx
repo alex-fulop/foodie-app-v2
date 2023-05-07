@@ -4,13 +4,11 @@ import Footer from "./Footer";
 import SuggestedAccounts from "./SuggestedAccounts";
 import Menu from "./Menu";
 import ConversationsWrapper from "../chat/conversations/ConversationsWrapper";
-import {useSession} from "next-auth/react";
 import {Session} from "next-auth";
 import {useRouter} from "next/router";
 
-const Sidebar = () => {
+const Sidebar = ({session}: {session: Session}) => {
     const [showSidebar, setShowSidebar] = useState(true);
-    const {data: session} = useSession();
     const router = useRouter();
 
     return (

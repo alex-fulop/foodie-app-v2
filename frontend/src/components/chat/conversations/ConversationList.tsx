@@ -16,14 +16,8 @@ interface ConversationListProps {
     onViewConversation: (conversationId: string, hasSeenLatestMessage: boolean) => void;
 }
 
-const ConversationList: React.FC<ConversationListProps> = ({
-                                                               session,
-                                                               conversations,
-                                                               onViewConversation,
-                                                           }) => {
-    const {
-        user: {id: userId},
-    } = session;
+const ConversationList: React.FC<ConversationListProps> = ({session, conversations, onViewConversation}) => {
+    const {user: {id: userId}} = session;
 
     const {modalOpen, openModal, closeModal} = useContext<IModalContext>(ModalContext);
     const [editingConversation, setEditingConversation] =
@@ -35,11 +29,10 @@ const ConversationList: React.FC<ConversationListProps> = ({
     /**
      * Mutations
      */
-    const [updateParticipants, {loading: updateParticipantsLoading}] =
-        useMutation<
-            { updateParticipants: boolean },
-            { conversationId: string; participantIds: Array<string> }
-        >(ConversationOperations.Mutations.updateParticipants);
+    const [updateParticipants] = useMutation<
+        { updateParticipants: boolean },
+        { conversationId: string; participantIds: Array<string> }
+    >(ConversationOperations.Mutations.updateParticipants);
 
     const [deleteConversation] = useMutation<
         { deleteConversation: boolean },
@@ -90,15 +83,15 @@ const ConversationList: React.FC<ConversationListProps> = ({
         }
     };
 
+    const onEditConversation = (conversation: ConversationPopulated) => {
+        setEditingConversation(conversation);
+        openModal();
+    };
+
     const getUserParticipantObject = (conversation: ConversationPopulated) => {
         return conversation.participants.find(
             (p: ParticipantPopulated) => p.user.id === session.user.id
         ) as ParticipantPopulated;
-    };
-
-    const onEditConversation = (conversation: ConversationPopulated) => {
-        setEditingConversation(conversation);
-        openModal();
     };
 
     const toggleClose = () => {
@@ -136,17 +129,16 @@ const ConversationList: React.FC<ConversationListProps> = ({
                 getUserParticipantObject={getUserParticipantObject}
             />
             {sortedConversations.map((conversation) => {
-                const {hasSeenLatestMessage} = getUserParticipantObject(conversation);
+                const participant = conversation.participants.find((p: ParticipantPopulated) => p.user.id === userId);
+
                 return (
                     <ConversationItem
                         key={conversation.id}
                         userId={session.user.id}
                         conversation={conversation}
-                        hasSeenLatestMessage={hasSeenLatestMessage}
+                        hasSeenLatestMessage={participant?.hasSeenLatestMessage}
                         selectedConversationId={conversationId as string}
-                        onClick={() =>
-                            onViewConversation(conversation.id, hasSeenLatestMessage)
-                        }
+                        onClick={() => onViewConversation(conversation.id, participant?.hasSeenLatestMessage)}
                         onEditConversation={() => onEditConversation(conversation)}
                         onDeleteConversation={onDeleteConversation}
                         onLeaveConversation={onLeaveConversation}
