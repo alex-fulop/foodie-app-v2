@@ -9,6 +9,7 @@ import Auth from "../components/auth";
 import {BASE_URL} from "../util/constants";
 import {GetServerSideProps} from "next";
 import {Session} from "next-auth";
+import Sidebar from "../components/sidebar/Sidebar";
 
 interface IProps {
     videos: Video[]
@@ -24,17 +25,20 @@ const Home = ({videos}: IProps) => {
     };
 
     return (
-        <Box>
+        <>
             {session && session?.user?.username ? (
                 <MainLayout>
-                    <Feed videos={videos}/>
+                    <>
+                        <Sidebar session={session as Session}/>
+                        <Feed videos={videos}/>
+                    </>
                 </MainLayout>
             ) : (
                 <Box>
                     <Auth session={session} reloadSession={reloadSession}/>
                 </Box>
             )}
-        </Box>
+        </>
     );
 }
 

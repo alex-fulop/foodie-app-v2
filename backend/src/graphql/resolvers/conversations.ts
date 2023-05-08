@@ -88,11 +88,7 @@ const resolvers = {
                 throw new GraphQLError('Error creating conversation');
             }
         },
-        markConversationAsRead: async function (
-            _: any,
-            args: { userId: string, conversationId: string },
-            context: GraphQLContext
-        ): Promise<boolean> {
+        markConversationAsRead: async function (_: any, args: { userId: string, conversationId: string }, context: GraphQLContext): Promise<boolean> {
             const { session, prisma } = context;
             const { userId, conversationId } = args;
 
@@ -130,11 +126,7 @@ const resolvers = {
                 throw new GraphQLError(error?.message);
             }
         },
-        deleteConversation: async function (
-            _: any,
-            args: { conversationId: string },
-            context: GraphQLContext
-        ): Promise<boolean> {
+        deleteConversation: async function (_: any, args: { conversationId: string }, context: GraphQLContext): Promise<boolean> {
             const {session, prisma, pubsub} = context;
             const {conversationId} = args;
 
@@ -179,6 +171,8 @@ const resolvers = {
                     }),
                 ]);
 
+                console.log('prea sexy', deletedConversation)
+
                 await pubsub.publish('CONVERSATION_DELETED', {
                     conversationDeleted: deletedConversation,
                 });
@@ -205,16 +199,14 @@ const resolvers = {
 
                 const {conversationCreated: {participants}} = payload;
 
-                return userIsConversationParticipant(
-                    participants,
-                    session.user.id
-                );
+                console.log('created sexy', payload)
+
+                return userIsConversationParticipant(participants, session.user.id);
             })
         },
         conversationUpdated: {
             subscribe: withFilter((_: any, __: any, context: GraphQLContext) => {
                     const {pubsub} = context;
-
                     return pubsub.asyncIterator(['CONVERSATION_UPDATED']);
                 },
                 (payload: ConversationUpdatedSubscriptionPayload, _: any, context: GraphQLContext) => {
@@ -231,10 +223,7 @@ const resolvers = {
                         },
                     } = payload;
 
-                    return userIsConversationParticipant(
-                        participants,
-                        userId
-                    );
+                    return userIsConversationParticipant(participants, userId);
                 }
             ),
         },
@@ -242,7 +231,6 @@ const resolvers = {
             subscribe: withFilter(
                 (_: any, __: any, context: GraphQLContext) => {
                     const {pubsub} = context;
-
                     return pubsub.asyncIterator(['CONVERSATION_DELETED']);
                 }, (payload: ConversationDeletedSubscriptionPayload, _: any, context: GraphQLContext) => {
                     const {session} = context;
@@ -254,10 +242,7 @@ const resolvers = {
                     const {id: userId} = session.user;
                     const {conversationDeleted: {participants}} = payload;
 
-                    return userIsConversationParticipant(
-                        participants,
-                        userId
-                    );
+                    return true;
                 }),
         }
     },

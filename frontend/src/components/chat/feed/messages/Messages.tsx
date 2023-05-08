@@ -10,10 +10,9 @@ import MessageItem from "./MessageItem";
 interface MessagesProps {
     userId: string;
     conversationId: string;
-    senderImage: string
 }
 
-const Messages: React.FC<MessagesProps> = ({userId, conversationId, senderImage}) => {
+const Messages: React.FC<MessagesProps> = ({userId, conversationId}) => {
 
     const { data, loading, error, subscribeToMore } = useQuery<
         MessagesData,

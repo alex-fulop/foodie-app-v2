@@ -12,7 +12,7 @@ const Sidebar = ({session}: {session: Session}) => {
     const router = useRouter();
 
     return (
-        <div>
+        <div className="h-[92vh] overflow-hidden border-r-2 xl:border-none">
             <div
                 className="block xl:hidden m-2 ml-4 mt-3 text-xl"
                 onClick={() => setShowSidebar((prev) => !prev)}

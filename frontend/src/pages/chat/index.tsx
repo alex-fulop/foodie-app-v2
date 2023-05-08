@@ -1,31 +1,37 @@
-import React, {ReactElement} from "react";
-import {Flex} from "@chakra-ui/react";
-import MainLayout from "../../pages/layout/MainLayout";
+import React from "react";
 import {NextPageWithLayout} from "../_app";
-import FeedWrapper from "../../components/chat/feed/FeedWrapper";
-import {useSession} from "next-auth/react";
+import ChatWrapper from "../../components/chat/feed/FeedWrapper";
+import {getSession, useSession} from "next-auth/react";
 import {Session} from "next-auth";
+import MainLayout from "../layout/MainLayout";
+import Sidebar from "../../components/sidebar/Sidebar";
+import {GetServerSideProps} from "next";
+
+interface IChatProps {
+    session: any
+}
 
 const Chat: NextPageWithLayout = () => {
     const {data: session} = useSession();
 
     return (
-        <>
-            <Flex height="90vh">
-                <div className='hidden lg:flex w-[100%]'>
-                    <FeedWrapper session={session as Session}/>
-                </div>
-            </Flex>
-        </>
+        <MainLayout>
+            <>
+                <Sidebar session={session as Session}/>
+                <ChatWrapper session={session as Session}/>
+            </>
+        </MainLayout>
     );
 };
 
-Chat.getLayout = function getLayout(page: ReactElement) {
-    return (
-        <MainLayout>
-            {page}
-        </MainLayout>
-    )
+export const getServerSideProps: GetServerSideProps<IChatProps> = async ({req}) => {
+    const session = await getSession({req});
+
+    return {
+        props: {
+            session: session ? session : null
+        }
+    };
 }
 
 

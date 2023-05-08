@@ -17,34 +17,37 @@ const FeedWrapper: React.FC<FeedWrapperProps> = ({session}) => {
     const {conversationId} = router.query;
 
     return (
-        <Flex
-            display={{base: conversationId ? "flex" : "none", md: "flex"}}
-            direction="column"
-            width="100%"
-        >
-            {conversationId && typeof conversationId === "string" ? (
-                <>
-                    <Flex
-                        direction="column"
-                        justify="space-between"
-                        overflow="hidden"
-                        flexGrow={1}
-                    >
-                        <MessagesHeader
-                            userId={session.user.id}
-                            conversationId={conversationId}
-                        />
-                        <Messages
-                            userId={session.user.id}
-                            conversationId={conversationId}
-                        />
-                    </Flex>
-                    <MessageInput session={session} conversationId={conversationId}/>
-                </>
-            ) : (
-                <NoConversationSelected/>
-            )}
-        </Flex>
+        <div className="flex flex-col flex-1 mt-2">
+            <Flex
+                display={{base: conversationId ? "flex" : "none", md: "flex"}}
+                direction="column"
+                width="100%"
+                height='92vh'
+            >
+                {conversationId && typeof conversationId === "string" ? (
+                    <>
+                        <Flex
+                            direction="column"
+                            justify="space-between"
+                            overflow="hidden"
+                            flexGrow={1}
+                        >
+                            <MessagesHeader
+                                userId={session.user.id}
+                                conversationId={conversationId}
+                            />
+                            <Messages
+                                userId={session.user.id}
+                                conversationId={conversationId}
+                            />
+                        </Flex>
+                        <MessageInput session={session} conversationId={conversationId}/>
+                    </>
+                ) : (
+                    <NoConversationSelected/>
+                )}
+            </Flex>
+        </div>
     );
 };
 export default FeedWrapper;

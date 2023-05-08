@@ -1,7 +1,6 @@
 import {useMutation} from "@apollo/client";
 import {Box, Text} from "@chakra-ui/react";
 import {Session} from "next-auth";
-import {useRouter} from "next/router";
 import React, {useContext, useState} from "react";
 import toast from "react-hot-toast";
 import {ConversationPopulated, ParticipantPopulated,} from "../../../../../backend/src/util/types";
@@ -9,6 +8,7 @@ import {IModalContext, ModalContext} from "../../../context/ModalContext";
 import ConversationItem from "./ConversationItem";
 import ConversationModal from "./modal/ConversationModal";
 import ConversationOperations from '../../../graphql/operations/conversations'
+import {useRouter} from "next/router";
 
 interface ConversationListProps {
     session: Session;
@@ -69,7 +69,7 @@ const ConversationList: React.FC<ConversationListProps> = ({session, conversatio
                         conversationId,
                     },
                     update: () => {
-                        router.replace(process.env.NEXT_PUBLIC_BASE_URL as string);
+                        router.replace(process.env.NEXT_PUBLIC_BASE_URL + '/chat' as string);
                     },
                 }),
                 {

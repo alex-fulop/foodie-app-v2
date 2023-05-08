@@ -79,6 +79,13 @@ export interface ConversationCreatedSubscriptionData {
     };
 }
 
+export interface ConversationDeletedSubscriptionData {
+    subscriptionData: {
+        data: {
+            conversationDeleted: ConversationPopulated;
+        };
+    };
+}
 export interface ConversationDeletedData {
     conversationDeleted: {
         id: string;
