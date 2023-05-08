@@ -12,8 +12,8 @@ const Feed: React.FC<IFeedProps> = ({videos}) => {
         <div className="flex flex-col gap-10 h-[100vh] mt-2 videos flex-1">
             <div className="flex flex-col gap-10 overflow-auto videos h-full">
                 <div className='feed-container'>
-                    {videos.length ? (videos.map((video: Video, idx: number) => (
-                            <VideoCard post={video} key={video._id} idx={idx}/>))
+                    {videos.length ? (videos.map((video: Video) => (
+                            <VideoCard postDetails={video} key={video._id} />))
                     ) : (
                         <div className='my-60'>
                             <NoResults text={'No Videos'}/>

@@ -45,11 +45,24 @@ a {
   display: none; /* hide scrollbar on Chrome, Safari, and Opera */
 }
 
-.video-controls {
+.fade-in {
   opacity: 0;
-  transition: opacity 0.2s ease-in-out;
+  visibility: hidden;
+  transform: translateX(-50%);
+  left: 100%;
+  bottom: -50px;
 }
 
-.video-controls.visible {
+.fade-in:is(.visible) {
   opacity: 1;
+  visibility: visible;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transform: translateX(0%);
+}
+
+.fade-in:is(.not-visible) {
+  opacity: 0;
+  visibility: visible;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transform: translateX(-50%);
 }

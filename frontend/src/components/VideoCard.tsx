@@ -4,18 +4,24 @@ import {NextPage} from "next";
 import Link from "next/link";
 import Image from 'next/image';
 import {BsFillPauseFill, BsFillPlayFill, GoVerified, HiVolumeOff, HiVolumeUp} from "react-icons/all";
+import axios from "axios";
+import {BASE_URL} from "../util/constants";
+import {useSession} from "next-auth/react";
+import {getAllUsers} from "../util/functions";
+import LikeButton from "./LikeButton";
 
 interface IProps {
-    post: Video;
-    idx: number
+    postDetails: Video;
 }
 
-const VideoCard: NextPage<IProps> = ({post, idx}) => {
+const VideoCard: NextPage<IProps> = ({postDetails}) => {
+    const [post, setPost] = useState(postDetails);
     const [isHover, setIsHover] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isVideoMuted, setIsVideoMuted] = useState(false);
 
     const videoRef = useRef<HTMLVideoElement>(null);
+    const {data: session} = useSession();
 
     const onVideoPress = () => {
         if (isPlaying) {
@@ -28,10 +34,24 @@ const VideoCard: NextPage<IProps> = ({post, idx}) => {
     }
 
     useEffect(() => {
-        if (videoRef?.current) {
+        if (post && videoRef?.current) {
             videoRef.current.muted = isVideoMuted;
         }
-    }, [isVideoMuted]);
+    }, [post, isVideoMuted]);
+
+    const handleLike = async (like: boolean) => {
+        if (!session?.user) {
+            throw new Error("Not authorized");
+        }
+
+        const {data} = await axios.put(`${BASE_URL}/api/like`, {
+            userId: session?.user.id,
+            postId: post._id,
+            like
+        });
+
+        setPost({...post, likes: data.likes});
+    }
 
 
     return (
@@ -76,34 +96,55 @@ const VideoCard: NextPage<IProps> = ({post, idx}) => {
                             className="lg:w-[600px] lg:h-[530px] h-[300px] md:h-[600px] rounded-2xl cursor-pointer bg-gradient-to-r from-pink-400 to-pink-600 bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-60 border border-neutral-900"
                             style={{backdropFilter: 'blur(20px)'}}
                             src={post.video.asset.url}
-
                         >
                         </video>
                     </Link>
 
-                    {isHover && (
-                        <div
-                            className="absolute bottom-6 cursor-pointer left-8 md:left-14 lg:left-4 flex gap-10 lg:justify-between w-[100px] md:w-[50px] p-3 video-controls{isHover && 'visible'}">
-                            {isPlaying ? (
-                                <button onClick={onVideoPress}>
-                                    <BsFillPauseFill className="text-black text-2xl lg:text-4xl"/>
-                                </button>
-                            ) : (
-                                <button onClick={onVideoPress}>
-                                    <BsFillPlayFill className="text-black text-2xl lg:text-4xl"/>
-                                </button>
-                            )}
-                            {isVideoMuted ? (
-                                <button onClick={() => setIsVideoMuted(false)}>
-                                    <HiVolumeOff className="text-black text-2xl lg:text-4xl"/>
-                                </button>
-                            ) : (
-                                <button onClick={() => setIsVideoMuted(true)}>
-                                    <HiVolumeUp className="text-black text-2xl lg:text-4xl"/>
-                                </button>
-                            )}
-                        </div>
-                    )}
+                    <div
+                        className="absolute bottom-6 cursor-pointer left-8 md:left-14 lg:left-11 flex flex-col gap-6 lg:justify-between p-3 video-controls{isHover && 'visible'}">
+                        {isVideoMuted ? (
+                            <button className={`fade-in ${isHover ? 'visible' : 'not-visible'}`}
+                                    onClick={() => setIsVideoMuted(false)}>
+                                <div
+                                    className='bg-neutral-700 rounded-full p-2 md:p-4 text-[#F51997] cursor-pointer'>
+                                    <HiVolumeOff className="text-white text-2xl lg:text-4xl"/>
+                                </div>
+                            </button>
+                        ) : (
+                            <button className={`fade-in ${isHover ? 'visible' : 'not-visible'}`}
+                                    onClick={() => setIsVideoMuted(true)}>
+                                <div
+                                    className='bg-neutral-700 rounded-full p-2 md:p-4 text-[#F51997] cursor-pointer'>
+                                    <HiVolumeUp className="text-white text-2xl lg:text-4xl"/>
+                                </div>
+                            </button>
+                        )}
+                        {isPlaying ? (
+                            <button className={`fade-in ${isHover ? 'visible' : 'not-visible'}`} onClick={onVideoPress}>
+                                <div
+                                    className='bg-neutral-700 rounded-full p-2 md:p-4 text-[#F51997] cursor-pointer'>
+                                    <BsFillPauseFill className="text-white text-2xl lg:text-4xl fade-in visible"/>
+                                </div>
+                            </button>
+                        ) : (
+                            <button className={`fade-in ${isHover ? 'visible' : 'not-visible'}`} onClick={onVideoPress}>
+                                <div
+                                    className='bg-neutral-700 rounded-full p-2 md:p-4 text-[#F51997] cursor-pointer'>
+                                    <BsFillPlayFill className="text-white text-2xl lg:text-4xl"/>
+                                </div>
+                            </button>
+                        )}
+                        {session?.user && (
+                            <div className={`fade-in ${isHover ? 'visible' : 'not-visible'}`}>
+                                <LikeButton likes={post.likes}
+                                            showLikes={false}
+                                            handleLike={() => handleLike(true)}
+                                            handleDislike={() => handleLike(false)}
+                                />
+                            </div>
+                        )}
+
+                    </div>
                 </div>
             </div>
         </div>

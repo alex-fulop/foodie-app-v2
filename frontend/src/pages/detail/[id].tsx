@@ -78,8 +78,6 @@ const Detail = ({postDetails, allUsers}: IProps) => {
         }
     }
 
-    console.log(post)
-
     if (!post) return null;
 
     return (
@@ -151,6 +149,7 @@ const Detail = ({postDetails, allUsers}: IProps) => {
                     <div className='mt-10 px-10'>
                         {session?.user && (
                             <LikeButton likes={post.likes}
+                                        showLikes={true}
                                         handleLike={() => handleLike(true)}
                                         handleDislike={() => handleLike(false)}
                             />
