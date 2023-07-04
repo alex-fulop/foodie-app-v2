@@ -58,28 +58,6 @@ export const footerList3 = [
     "Community Guidelines",
 ];
 
-export const borderColors = [
-    "xl:border-[#FF0000]",
-    "xl:border-[#FF8C00]",
-    "xl:border-[#F7FF00]",
-    "xl:border-[#2AFF00]",
-    "xl:border-[#00EAFF]",
-    "xl:border-[#0062FF]",
-    "xl:border-[#9000FF]",
-    "xl:border-[#FF00FF]",
-];
-
-export const textColors = [
-    "text-[#FF0000]",
-    "text-[#FF8C00]",
-    "text-[#F7FF00]",
-    "text-[#2AFF00]",
-    "text-[#00EAFF]",
-    "text-[#0062FF]",
-    "text-[#9000FF]",
-    "text-[#FF00FF]",
-];
-
 export const randomGradients = [
     'bg-gradient-to-r from-yellow-600 to-red-600',
     'bg-gradient-to-r from-pink-400 to-pink-600',
